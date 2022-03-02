@@ -4,5 +4,5 @@
 ?>
 
 <?php
-  Footer("");
+  Footer("script");
 ?>

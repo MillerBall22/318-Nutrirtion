@@ -1,20 +1,57 @@
 <?php
-function dbconnection() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "";
+  $servername = "localhost";
+  $username = "root";
+  $password = "@onevoiceO2TFK";
+  $dbname = "318Nutrition";
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+  $conn = new mysqli($servername, $username, $password, $dbname);
 
-    if ($conn->connect_error) {
-     die("Connection failed: " . $conn->connect_error);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
+  session_start();
+
+  function LoginCheck() {
+    if ($_SESSION['loggedIn'] === NULL) {
+      header('Location: http://localhost/318 Nutrirtion/PHP Scripts/Login.php');
+      exit();
     }
+  }
+
+  function EmployeeCheck() {
+    if ($_SESSION['Employee'] != "1") {
+      header('Location: http://localhost/318%20Nutrirtion/PHP%20Scripts/Restricted%20Page.php');
+      exit();
+    }
+  }
+
+  function FormStart($action, $header) {
+    echo '<div class="form">';
+    echo '<form action="', $action, '.php" method="post">';
+    echo '<h1>', $header,'</h1>';
+  }
+
+  function FormEnd() {
+    echo '</form>';
+    echo '</div>';
+  }
+
+  function FormInput($label, $type, $name, $value) {
+      echo '<label>', $label, ': </label>';
+      echo '<input required type="', $type, '" name="', $name, '" value="', $value, '">';
+      echo "<br>";
+  }
+
+  function FormButton($action, $value) {
+    echo '<input type="submit" formaction="', $action, '.php" value = "', $value, '">';
   }
 
   function navigation($page) {
     $categories = array("My Plan", "Contact", "Programs", "Home");
+    if(isset($_SESSION['loggedIn'])) {
+      $categories = array("Sign Out", "My Plan", "Contact", "Programs", "Home");
+    }
     echo '
       <!Doctype html>
         <html lang="en">
@@ -123,6 +160,10 @@ function dbconnection() {
       }
       echo '</div>';
       echo '</div>';
+  }
+
+  function ChangePageButton($page) {
+    echo '<a href="', $page, '.php">', $page, '</a>';
   }
 
   function Footer($script)
